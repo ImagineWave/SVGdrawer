@@ -5,14 +5,16 @@ import abstracts.Shape;
 import abstracts.Storage;
 import exceptions.ItemNotFoundException;
 import exceptions.CantPutItemException;
+import utils.SVGWriter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class Box extends Storage {
     public static final double maxWeight = 50;
-
+    public static final int drawInterval = 10;
     public Box (String name, String color, Shape shape, double weight, int size){
         super(
                 name, color, shape, weight, size
@@ -42,7 +44,7 @@ public class Box extends Storage {
         return box;
     }
     public static Box createDefaultBox(){
-        Box box = new Box("box", "black", Shape.CUBE, 1,10);
+        Box box = new Box("box", "burlywood", Shape.CUBE, 1,10);
 
         return box;
     }
@@ -79,6 +81,25 @@ public class Box extends Storage {
 
     @Override
     protected void checkSize(){
+
+    }
+    @Override
+    public void draw(SVGWriter writer, int x, int y) throws IOException {
+        writer.writeRoundRect(x,y, this.getWidth(),this.getHeight(), this.getColor());
+        int boxWidth = this.getWidth();
+        int boxHeight = this.getHeight();
+        int curentX = x+drawInterval;
+        int curentY = y+drawInterval;
+        for(Item item: getContent()){
+            if(curentX+item.getWidth()<= x+boxWidth){
+                item.draw(writer, curentX, curentY);
+                curentX+= item.getWidth()+drawInterval;
+            }
+
+            //item.draw(writer, curentX, curentY);
+            //for(; curentX<=boxWidth; curentX+= item.getWidth()+10){
+            //}
+        }
 
     }
 }

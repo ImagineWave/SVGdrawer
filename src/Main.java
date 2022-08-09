@@ -18,9 +18,16 @@ public class Main {
     public static void main (String[] args){
         Apple apple = Apple.creatDefaultApple();
         Brick brick = Brick.createDefaultBrick();
+        Box box = Box.createDefaultBox();
+
+        box.put(brick);
+        for(int i = 0; i<15; i++){
+            box.put(Brick.createDefaultBrick());
+        }
 
         try(SVGWriter writer = new SVGWriter();) {
-            brick.draw(writer, 1,1);
+
+            box.draw(writer, -500,-500);
 
         } catch (IOException e) {
             e.printStackTrace();

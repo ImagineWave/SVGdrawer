@@ -39,7 +39,7 @@ public class Bag extends Storage {
         return bag;
     }
     public static Bag createDefaultBag(){
-        Bag bag = new Bag("bag", "brown", Shape.SPHERE, 1,1);
+        Bag bag = new Bag("bag", "burlywood", Shape.SPHERE, 1,1);
 
         return bag;
     }

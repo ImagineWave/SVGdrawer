@@ -16,7 +16,7 @@ public class SVGWriter implements AutoCloseable{
 
     private void whiteHeader()throws IOException{
         fr.write("<?xml version=\"1.0\"?>\n" +
-                "<svg width=\"300\" height=\"300\" viewBox=\"0 0 300 300\"\n" +
+                "<svg width=\"3000\" height=\"3000\" viewBox=\"0 0 3000 3000\"\n" +
                 "xmlns=\"http://www.w3.org/2000/svg\">\n");
     }
     private void whiteFooter()throws IOException{
@@ -36,15 +36,53 @@ public class SVGWriter implements AutoCloseable{
         sb.append(x); // Сюда Х
         sb.append("\" y=\"");
         sb.append(y); // Сюда Y
+        sb.append("\" width=\"");
+        sb.append(width); // Сюда ширину (width)
+        sb.append("\" height=\"");
+        sb.append(height); // Сюда высоту (height)
+        sb.append("\" style=\"fill:");
+        sb.append(color); //Сюда ЦВЕТ
+        sb.append(";stroke:black\"/>");
+        sb.append("\n");
+        fr.write(sb.toString());
 
-
-        fr.write("<rect x=\""+x+"\" y=\""+y+"\" width=\""+width+"\" height=\""+height+"\" style=\"fill:"+color+";stroke:black\"/>");
+        //fr.write("<rect x=\""+x+"\" y=\""+y+"\" width=\""+width+"\" height=\""+height+"\" style=\"fill:"+color+";stroke:black\"/>");
     }
-//    public void writeRoundRect(x,y,w,h,r1,r2,color1,color2){
-//
-//    }
-    public void writeRound(){
-
+    public void writeRoundRect(int x,int y,int width,int height,String color) throws IOException{
+        StringBuilder sb = new StringBuilder();
+        sb.append("<rect x=\"");
+        sb.append(x); // Сюда Х
+        sb.append("\" y=\"");
+        sb.append(y); // Сюда Y
+        sb.append("\" width=\"");
+        sb.append(width); // Сюда ширину (width)
+        sb.append("\" height=\"");
+        sb.append(height); // Сюда высоту (height)
+        sb.append("\" rx=\"30\"");
+        sb.append(" ry=\"30\"");
+        sb.append(" style=\"fill:");
+        sb.append(color); //Сюда ЦВЕТ
+        sb.append(";stroke:black\"/>");
+        sb.append("\n");
+        fr.write(sb.toString());
+        //<rect x="10" y="70" width="100" height="50" rx="30" ry="30" style="fill:green;stroke:red"/>
+    }
+    public void writeRound(int cx,int cy,int radius,String color) throws IOException{
+        StringBuilder sb = new StringBuilder();
+        sb.append("<ellipse cx=\"");
+        sb.append(cx); // Сюда Х
+        sb.append("\" cy=\"");
+        sb.append(cy); // Сюда Y
+        sb.append("\" ry=\"");
+        sb.append(radius); // Сюда ширину (width)
+        sb.append("\" rx=\"");
+        sb.append(radius); // Сюда высоту (height)
+        sb.append("\" style=\"fill:");
+        sb.append(color); //Сюда ЦВЕТ
+        sb.append(";stroke:black\"/>");
+        sb.append("\n");
+        //<ellipse cx="80" cy="200" rx="50" ry="50" style="fill:yellow;stroke:green;stroke-width:5px"/>
+        fr.write(sb.toString());
     }
     public void writeCube(){
 
