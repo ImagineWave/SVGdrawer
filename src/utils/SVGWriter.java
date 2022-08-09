@@ -1,5 +1,7 @@
 package utils;
 
+import exceptions.NegativeCordsException;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,6 +33,7 @@ public class SVGWriter implements AutoCloseable{
 
     }
     public void writeRect(int x,int y,int width,int height,String color) throws IOException{
+        checkCords(x,y);
         StringBuilder sb = new StringBuilder();
         sb.append("<rect x=\"");
         sb.append(x); // Сюда Х
@@ -49,6 +52,7 @@ public class SVGWriter implements AutoCloseable{
         //fr.write("<rect x=\""+x+"\" y=\""+y+"\" width=\""+width+"\" height=\""+height+"\" style=\"fill:"+color+";stroke:black\"/>");
     }
     public void writeRoundRect(int x,int y,int width,int height,String color) throws IOException{
+        checkCords(x,y);
         StringBuilder sb = new StringBuilder();
         sb.append("<rect x=\"");
         sb.append(x); // Сюда Х
@@ -68,6 +72,7 @@ public class SVGWriter implements AutoCloseable{
         //<rect x="10" y="70" width="100" height="50" rx="30" ry="30" style="fill:green;stroke:red"/>
     }
     public void writeRound(int cx,int cy,int radius,String color) throws IOException{
+        checkCords(cx,cy);
         StringBuilder sb = new StringBuilder();
         sb.append("<ellipse cx=\"");
         sb.append(cx); // Сюда Х
@@ -89,5 +94,12 @@ public class SVGWriter implements AutoCloseable{
     }
     public void writeFlat(){
 
+    }
+    private void checkCords(int... args){
+        for(int i: args){
+            if(i<0){
+                throw new NegativeCordsException("Coordinates can not be negative");
+            }
+        }
     }
 }

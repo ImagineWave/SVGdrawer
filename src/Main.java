@@ -24,10 +24,13 @@ public class Main {
         for(int i = 0; i<15; i++){
             box.put(Brick.createDefaultBrick());
         }
+        for(int i = 0; i<99; i++){
+            box.put(Apple.creatDefaultApple());
+        }
 
         try(SVGWriter writer = new SVGWriter();) {
 
-            box.draw(writer, -500,-500);
+            box.draw(writer, 100,100);
 
         } catch (IOException e) {
             e.printStackTrace();

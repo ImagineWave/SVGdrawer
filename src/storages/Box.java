@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class Box extends Storage {
-    public static final double maxWeight = 50;
+    public static final double maxWeight = 500;
     public static final int drawInterval = 10;
     public Box (String name, String color, Shape shape, double weight, int size){
         super(
@@ -90,16 +90,38 @@ public class Box extends Storage {
         int boxHeight = this.getHeight();
         int curentX = x+drawInterval;
         int curentY = y+drawInterval;
+        int maxY = 0;
+        ArrayList<Item> badItems = new ArrayList<>();
+
+        //НОРМАЛЬНЫЕ ПРЕДМЕТЫ
         for(Item item: getContent()){
+            if(item.getShape().equals(Shape.SPHERE)){
+                badItems.add(item);
+                continue;
+            }
             if(curentX+item.getWidth()<= x+boxWidth){
                 item.draw(writer, curentX, curentY);
                 curentX+= item.getWidth()+drawInterval;
+                if(item.getHeight()>maxY) maxY=item.getHeight();
+            } else {
+                curentX= x+drawInterval;
+                curentY+= maxY+drawInterval;
+                maxY=0;
+                item.draw(writer, curentX, curentY);
             }
-
-            //item.draw(writer, curentX, curentY);
-            //for(; curentX<=boxWidth; curentX+= item.getWidth()+10){
-            //}
         }
-
+        //ХУЕВЫЕ ПРЕДМЕТЫ
+        for(Item item:badItems){
+            if(curentX+item.getWidth()*2<= x+boxWidth){
+                item.draw(writer, curentX, curentY);
+                curentX+= item.getWidth()*2+drawInterval;
+                if(item.getHeight()*2>maxY) maxY=item.getHeight()*2;
+            } else if(curentY+item.getHeight()*2<= y+boxHeight){
+                curentX= x+drawInterval;
+                curentY+= maxY*2+drawInterval;
+                item.draw(writer, curentX, curentY);
+                maxY=0;
+            }
+        }
     }
 }

@@ -79,7 +79,7 @@ public abstract class Item{
     public void draw(SVGWriter writer, int x, int y) throws IOException {
         switch (shape) {
             case SPHERE: {
-                writer.writeRound(x,y,this.getWidth(), color);
+                writer.writeRound(x+this.getWidth(),y+this.getWidth(),this.getWidth(), color);
                 break;
             }
             case CUBE: {
