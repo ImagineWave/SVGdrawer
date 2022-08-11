@@ -68,7 +68,7 @@ public class BagTest {
     void showContent(){
         Assertions.assertEquals(
                 "Name: bag\n" +
-                "Color: brown\n" +
+                "Color: burlywood\n" +
                 "Shape: Sphere\n" +
                 "Weight: 4.0\n" +
                 "Size: 1\n" +

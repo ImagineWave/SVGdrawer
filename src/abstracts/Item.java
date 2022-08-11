@@ -71,6 +71,9 @@ public abstract class Item{
         }
     }
     public int getHeight(){ //
+        if(this.getShape() == (Shape.SPHERE)){
+            return size*100;
+        }
         return size*50;
     }
     public int getWidth(){
@@ -79,7 +82,7 @@ public abstract class Item{
     public void draw(SVGWriter writer, int x, int y) throws IOException {
         switch (shape) {
             case SPHERE: {
-                writer.writeRound(x+this.getWidth(),y+this.getWidth(),this.getWidth(), color);
+                writer.writeRound(x+this.getHeight()/2,y+this.getHeight()/2,this.getWidth()/2, color);
                 break;
             }
             case CUBE: {

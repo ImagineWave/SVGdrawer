@@ -38,18 +38,18 @@ public class Box extends Storage {
         double defaultBagWeight = this.getWeightOfEmptyStorage();
         return  contentWeight+defaultBagWeight;
     }
-    public static Box createBox(String name, String color){
-        Box box = new Box(name, color, Shape.CUBE, 1,10);
+    public static Box createBox(String name, String color, int  size){
+        Box box = new Box(name, color, Shape.CUBE, 1,size);
 
         return box;
     }
     public static Box createDefaultBox(){
-        Box box = new Box("box", "burlywood", Shape.CUBE, 1,10);
+        Box box = new Box("box", "burlywood", Shape.CUBE, 1,20);
 
         return box;
     }
     //Первый попавшийся с таким именем
-    public Item getByName(String name){
+    public Item getItemByName(String name){
         ArrayList<Item> content = getContent();
         for(Item item : content){
             if(item.getName().equalsIgnoreCase(name)){
@@ -59,7 +59,7 @@ public class Box extends Storage {
         throw new ItemNotFoundException("there is no \""+name+"\" in this storage");
     }
     //Первый попавшийся с таким цвеом
-    public Item getByColor(String color){
+    public Item getItemByColor(String color){
         ArrayList<Item> content = getContent();
         for(Item item : content){
             if(item.getColor().equalsIgnoreCase(color)){
@@ -85,9 +85,11 @@ public class Box extends Storage {
     }
     @Override
     public void draw(SVGWriter writer, int x, int y) throws IOException {
-        writer.writeRoundRect(x,y, this.getWidth(),this.getHeight(), this.getColor());
+        writer.writeRect(x,y, this.getWidth(),this.getHeight(), this.getColor());
         int boxWidth = this.getWidth();
         int boxHeight = this.getHeight();
+        int boxXedge = boxWidth+x;
+        int boxYedge = boxHeight+y;
         int curentX = x+drawInterval;
         int curentY = y+drawInterval;
         int maxY = 0;
@@ -103,24 +105,28 @@ public class Box extends Storage {
                 item.draw(writer, curentX, curentY);
                 curentX+= item.getWidth()+drawInterval;
                 if(item.getHeight()>maxY) maxY=item.getHeight();
-            } else {
+            } else if(curentY+item.getWidth()<=boxYedge){
                 curentX= x+drawInterval;
                 curentY+= maxY+drawInterval;
                 maxY=0;
                 item.draw(writer, curentX, curentY);
             }
         }
-        //ХУЕВЫЕ ПРЕДМЕТЫ
+
         for(Item item:badItems){
-            if(curentX+item.getWidth()*2<= x+boxWidth){
+            if(curentX+item.getWidth()< x+boxWidth){
                 item.draw(writer, curentX, curentY);
-                curentX+= item.getWidth()*2+drawInterval;
-                if(item.getHeight()*2>maxY) maxY=item.getHeight()*2;
-            } else if(curentY+item.getHeight()*2<= y+boxHeight){
+                curentX+= item.getWidth()+drawInterval;
+                if(item.getHeight()>maxY) maxY=item.getHeight();
+            } else if(curentY+item.getHeight()*2<boxYedge){
+                //item.draw(writer, curentX-item.getWidth()/2, curentY-item.getHeight()/2);
+
+                //item.draw(writer, curentX, curentY);
                 curentX= x+drawInterval;
-                curentY+= maxY*2+drawInterval;
-                item.draw(writer, curentX, curentY);
+                curentY+= maxY+drawInterval;
                 maxY=0;
+                item.draw(writer, curentX, curentY);
+
             }
         }
     }

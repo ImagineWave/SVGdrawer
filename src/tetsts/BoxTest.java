@@ -51,10 +51,10 @@ public class BoxTest {
     void testGet(){
         Assertions.assertEquals(apple, testBox.getItem(0));
         Assertions.assertEquals(heavyApple, testBox.getItem(1));
-        Assertions.assertEquals(heavyApple, testBox.getByColor("red"));
-        Assertions.assertEquals(apple, testBox.getByName("apple"));
+        Assertions.assertEquals(heavyApple, testBox.getItemByColor("red"));
+        Assertions.assertEquals(apple, testBox.getItemByName("apple"));
         ItemNotFoundException notFound = Assertions.assertThrows(ItemNotFoundException.class, () -> {
-            testBox.getByColor("white");
+            testBox.getItemByColor("white");
         });
     }
     @Test

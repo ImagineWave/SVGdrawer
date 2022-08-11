@@ -18,7 +18,7 @@ public class SVGWriter implements AutoCloseable{
 
     private void whiteHeader()throws IOException{
         fr.write("<?xml version=\"1.0\"?>\n" +
-                "<svg width=\"3000\" height=\"3000\" viewBox=\"0 0 3000 3000\"\n" +
+                "<svg width=\"5000\" height=\"5000\" viewBox=\"0 0 5000 5000\"\n" +
                 "xmlns=\"http://www.w3.org/2000/svg\">\n");
     }
     private void whiteFooter()throws IOException{
