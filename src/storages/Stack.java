@@ -4,11 +4,14 @@ import abstracts.Item;
 import abstracts.Shape;
 import abstracts.Storage;
 import exceptions.CantPutItemException;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 public class Stack extends Storage {
     public static final int maxAmount = 5;
+
+    private static final int drawInterval = 0;
 
     public Stack (String name, String color, Shape shape, double weight, int size){
         super(
@@ -68,5 +71,4 @@ public class Stack extends Storage {
     protected void checkSize(){
 
     }
-
 }

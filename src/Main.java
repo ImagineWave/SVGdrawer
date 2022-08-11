@@ -3,8 +3,12 @@ import items.Brick;
 import storages.Bag;
 import storages.Box;
 import utils.SVGWriter;
+import java.util.regex.*;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Scanner;
 
 public class Main {
     public static void main (String[] args){
@@ -12,26 +16,15 @@ public class Main {
         Brick brick = Brick.createDefaultBrick();
         Box box = Box.createDefaultBox();
         Box megaBox = Box.createBox("megaBox", "antiquewhite", 32);
-        Bag bag = Bag.createDefaultBag();
-        megaBox.put(Brick.createDefaultBrick());
-        for(int i = 0; i<100; i++){
-            megaBox.put(Apple.creatDefaultApple());
+        for(int i = 0; i<20; i++){
+            box.put(Brick.createDefaultBrick());
         }
-        megaBox.put(Bag.createDefaultBag());
-        megaBox.put(Bag.createDefaultBag());
-        for(int i = 0; i<100; i++){
-            megaBox.put(Brick.createDefaultBrick());
-        }
+        System.out.println(box.getContent().size());
 
-
-        for(int i = 0; i<310; i++){
-           box.put(Apple.creatDefaultApple());
-           //box.put(Brick.createDefaultBrick());
-        }
        // megaBox.put(box);
         try(SVGWriter writer = new SVGWriter();) {
 
-            megaBox.draw(writer, 100,100);
+            box.draw(writer, 100,100);
 
         } catch (IOException e) {
             e.printStackTrace();

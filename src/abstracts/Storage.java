@@ -4,7 +4,9 @@ import exceptions.ItemNotFoundException;
 import exceptions.SameItemException;
 import exceptions.StorageLimitException;
 import exceptions.ItemAlreadyStoredException;
+import utils.SVGWriter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class Storage extends Item {
@@ -23,6 +25,7 @@ public abstract class Storage extends Item {
     }
 
     private ArrayList<Item> content = new ArrayList<>();
+    private static final int drawInterval = 10;
     public double getTotalWeight() {
         double output = 0d;
         for (Item item : content) {
@@ -111,5 +114,49 @@ public abstract class Storage extends Item {
             return false;
         }
         return true;
+    }
+    @Override
+    public void draw(SVGWriter writer, int x, int y) throws IOException {
+        writer.writeRect(x,y, this.getWidth(),this.getHeight(), this.getColor());
+        int boxWidth = this.getWidth();
+        int boxHeight = this.getHeight();
+        int boxXedge = boxWidth+x;
+        int boxYedge = boxHeight+y;
+        int curentX = x+drawInterval;
+        int curentY = y+drawInterval;
+        int maxY = 0;
+        ArrayList<Item> badItems = new ArrayList<>();
+
+        //НОРМАЛЬНЫЕ ПРЕДМЕТЫ
+        for(Item item: getContent()){
+            if(item.getShape().equals(Shape.SPHERE)){
+                badItems.add(item);
+                continue;
+            }
+            if(curentX+item.getWidth()<= x+boxWidth){
+                item.draw(writer, curentX, curentY);
+                curentX+= item.getWidth()+drawInterval;
+                if(item.getHeight()>maxY) maxY=item.getHeight();
+            } else if(curentY+item.getWidth()<=boxYedge){
+                curentX= x+drawInterval;
+                curentY+= maxY+drawInterval;
+                maxY=0;
+                item.draw(writer, curentX, curentY);
+            }
+        }
+
+        for(Item item:badItems){
+            if(curentX+item.getWidth()< x+boxWidth){
+                item.draw(writer, curentX, curentY);
+                curentX+= item.getWidth()+drawInterval;
+                if(item.getHeight()>maxY) maxY=item.getHeight();
+            } else if(curentY+item.getHeight()<boxYedge){
+                curentX= x+drawInterval;
+                curentY+= maxY+drawInterval;
+                maxY=0;
+                item.draw(writer, curentX, curentY);
+
+            }
+        }
     }
 }
