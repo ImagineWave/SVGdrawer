@@ -5,7 +5,9 @@ import abstracts.Shape;
 import abstracts.Storage;
 import exceptions.CantPutItemException;
 import org.junit.jupiter.api.Test;
+import utils.SVGWriter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Stack extends Storage {
@@ -70,5 +72,14 @@ public class Stack extends Storage {
     @Override
     protected void checkSize(){
 
+    }
+
+    @Override
+    public void draw(SVGWriter writer, int x, int y) throws IOException {
+
+       for(Item item : getContent()){
+          item.draw(writer,x,y);
+          y+= item.getHeight();
+       }
     }
 }

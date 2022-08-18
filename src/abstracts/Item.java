@@ -70,8 +70,8 @@ public abstract class Item{
             throw new IllegalArgumentException("size cannot be more than 5 and less than 0");
         }
     }
-    public int getHeight(){ //
-        if(this.getShape() == (Shape.SPHERE)){
+    public int getHeight(){
+        if(this.getShape() == Shape.SPHERE){
             return size*100;
         }
         return size*50;

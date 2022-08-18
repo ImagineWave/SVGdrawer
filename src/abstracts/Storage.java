@@ -120,7 +120,6 @@ public abstract class Storage extends Item {
         writer.writeRect(x,y, this.getWidth(),this.getHeight(), this.getColor());
         int boxWidth = this.getWidth();
         int boxHeight = this.getHeight();
-        int boxXedge = boxWidth+x;
         int boxYedge = boxHeight+y;
         int curentX = x+drawInterval;
         int curentY = y+drawInterval;
@@ -129,33 +128,68 @@ public abstract class Storage extends Item {
 
         //НОРМАЛЬНЫЕ ПРЕДМЕТЫ
         for(Item item: getContent()){
+            boolean isDrawed = false;
             if(item.getShape().equals(Shape.SPHERE)){
                 badItems.add(item);
                 continue;
             }
-            if(curentX+item.getWidth()<= x+boxWidth){
-                item.draw(writer, curentX, curentY);
-                curentX+= item.getWidth()+drawInterval;
-                if(item.getHeight()>maxY) maxY=item.getHeight();
-            } else if(curentY+item.getWidth()<=boxYedge){
-                curentX= x+drawInterval;
-                curentY+= maxY+drawInterval;
-                maxY=0;
-                item.draw(writer, curentX, curentY);
+            while (!isDrawed){
+                if(curentX+item.getWidth()<= x+boxWidth){
+                    item.draw(writer, curentX, curentY);
+                    isDrawed = true;
+                    curentX+= item.getWidth()+drawInterval;
+                    if(item.getHeight()>maxY) maxY=item.getHeight();
+                }else if(curentY+item.getWidth()<=boxYedge){
+                    curentX= x+drawInterval;
+                    curentY+= maxY+drawInterval;
+                    maxY=0;
+                    //item.draw(writer, curentX, curentY);
+                    //isDrawed = false;
+                }
             }
+
         }
-
+    }
+    public void draw2(SVGWriter writer, int x, int y) throws IOException{
+        writer.writeRect(x,y, this.getWidth(),this.getHeight(), this.getColor());
+        int boxX = x;
+        int boxMaxX = x+this.getWidth();
+        int boxMayY = y+this.getHeight();
+        int maxHeight = 0;
+        x= x+drawInterval;
+        y= y+drawInterval;
+        ArrayList<Item> badItems = new ArrayList<>();
+        for(Item item: this.getContent()){
+            /**
+             * Сортировка вещей. СНАЧАЛА плоские, потом НЕ плоские
+             */
+            if(item.getShape() == Shape.SPHERE){
+                badItems.add(item);
+                continue;
+            }
+            //
+            if (((y+item.getHeight()+drawInterval<boxMayY)&&!(x+item.getWidth()+drawInterval<boxMaxX))){
+                x = boxX + drawInterval;
+                y = y + maxHeight+drawInterval;
+                maxHeight = 0;
+            }
+            if(x+item.getWidth()+drawInterval<boxMaxX){
+                item.draw(writer, x,y);
+                if(maxHeight<y) maxHeight=item.getHeight();
+                x = x+item.getWidth()+drawInterval;
+            }
+            //
+        }
         for(Item item:badItems){
-            if(curentX+item.getWidth()< x+boxWidth){
-                item.draw(writer, curentX, curentY);
-                curentX+= item.getWidth()+drawInterval;
-                if(item.getHeight()>maxY) maxY=item.getHeight();
-            } else if(curentY+item.getHeight()<boxYedge){
-                curentX= x+drawInterval;
-                curentY+= maxY+drawInterval;
-                maxY=0;
-                item.draw(writer, curentX, curentY);
-
+            if (((y+item.getHeight()+drawInterval<boxMayY)&&!(x+item.getWidth()+drawInterval<boxMaxX))){
+                x = boxX + drawInterval;
+                y = y + maxHeight+drawInterval;
+                maxHeight = 0;
+            }
+            if(x+item.getWidth()+drawInterval<boxMaxX){
+                item.draw(writer, x,y);
+                if(maxHeight<y) maxHeight=item.getHeight();
+                x = x+item.getWidth()+drawInterval;
             }
         }
     }
